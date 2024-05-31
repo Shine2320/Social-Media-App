@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  social-media-server:
+    build: .
+    ports:
+      - "${NODE_DOCKER_PORT}:${NODE_LOCAL_PORT}"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - mongo-db-server
+    environment:
+      MONGODB_URI: mongodb://mongo-db-server:${MONGODB_DOCKER_PORT}/${MONGODB_DATABASE}
+
+  mongo-db-server:
+    image: mongo
+    ports:
+      - "${MONGODB_DOCKER_PORT}:27017"
+    volumes:
+      - ./data/db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
